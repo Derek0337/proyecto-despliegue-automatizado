@@ -8,6 +8,17 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+const pool = require("./config/db");
+
+pool.query("SELECT NOW()", (err, res) => {
+    if (err) {
+        console.error("Error conectando a PostgreSQL:", err);
+    } else {
+        console.log("Conexión exitosa a PostgreSQL");
+        console.log(res.rows[0]);
+    }
+});
+
 // Importar rutas
 const tareasRoutes = require("./routes/tareas");
 

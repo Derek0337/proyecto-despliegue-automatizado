@@ -1,70 +1,109 @@
 const express = require("express");
 const router = express.Router();
-
-let tareas = [
-    {
-        id: 1,
-        titulo: "Primera tarea",
-        completada: false
-    }
-];
+const pool = require("../config/db");
 
 // Obtener todas las tareas
-router.get("/", (req, res) => {
-    res.json(tareas);
-});
+router.get("/", async (req, res) => {
+    try {
+        const resultado = await pool.query(
+            "SELECT * FROM tareas ORDER BY id ASC"
+        );
 
-// Obtener una tarea por ID
-router.get("/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const tarea = tareas.find(t => t.id === id);
+        res.json(resultado.rows);
+    } catch (error) {
+        console.error("Error al obtener las tareas:", error);
 
-    if (!tarea) {
-        return res.status(404).json({ mensaje: "Tarea no encontrada" });
+        res.status(500).json({
+            mensaje: error.message
+        });
     }
-
-    res.json(tarea);
 });
 
 // Crear una nueva tarea
-router.post("/", (req, res) => {
-    const { titulo } = req.body;
+router.post("/", async (req, res) => {
+    try {
+        const { titulo } = req.body;
 
-    const nuevaTarea = {
-        id: tareas.length + 1,
-        titulo,
-        completada: false
-    };
+        if (!titulo || titulo.trim() === "") {
+            return res.status(400).json({
+                mensaje: "El título es obligatorio"
+            });
+        }
 
-    tareas.push(nuevaTarea);
+        const resultado = await pool.query(
+            `INSERT INTO tareas (titulo, completada)
+             VALUES ($1, false)
+             RETURNING *`,
+            [titulo]
+        );
 
-    res.status(201).json(nuevaTarea);
+        res.status(201).json(resultado.rows[0]);
+    } catch (error) {
+        console.error("Error al crear la tarea:", error);
+
+        res.status(500).json({
+            mensaje: error.message
+        });
+    }
 });
 
 // Actualizar una tarea
-router.put("/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const { titulo, completada } = req.body;
+router.put("/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { titulo, completada } = req.body;
 
-    const tarea = tareas.find(t => t.id === id);
+        const resultado = await pool.query(
+            `UPDATE tareas
+             SET titulo = $1, completada = $2
+             WHERE id = $3
+             RETURNING *`,
+            [titulo, completada, id]
+        );
 
-    if (!tarea) {
-        return res.status(404).json({ mensaje: "Tarea no encontrada" });
+        if (resultado.rows.length === 0) {
+            return res.status(404).json({
+                mensaje: "Tarea no encontrada"
+            });
+        }
+
+        res.json(resultado.rows[0]);
+    } catch (error) {
+        console.error("Error al actualizar la tarea:", error);
+
+        res.status(500).json({
+            mensaje: error.message
+        });
     }
-
-    tarea.titulo = titulo;
-    tarea.completada = completada;
-
-    res.json(tarea);
 });
 
 // Eliminar una tarea
-router.delete("/:id", (req, res) => {
-    const id = parseInt(req.params.id);
+router.delete("/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
 
-    tareas = tareas.filter(t => t.id !== id);
+        const resultado = await pool.query(
+            "DELETE FROM tareas WHERE id = $1 RETURNING *",
+            [id]
+        );
 
-    res.json({ mensaje: "Tarea eliminada correctamente" });
+        if (resultado.rows.length === 0) {
+            return res.status(404).json({
+                mensaje: "Tarea no encontrada"
+            });
+        }
+
+        res.json({
+            mensaje: "Tarea eliminada correctamente",
+            tarea: resultado.rows[0]
+        });
+    } catch (error) {
+        console.error("Error al eliminar la tarea:", error);
+
+        res.status(500).json({
+            mensaje: error.message
+        });
+    }
 });
 
 module.exports = router;
