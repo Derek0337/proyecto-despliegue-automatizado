@@ -32,22 +32,51 @@ input {
 }
 
 button {
-    padding: 10px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
     cursor: pointer;
+}
+button:hover {
+    background-color: #1d4ed8;
 }
 
 article {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-}
-
+    background-color: #f3f4f6;
+    border-left: 6px solid #2563eb;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+   } 
 article span {
     flex: 1;
 }
 
+/* Tareas */
+article {
+    background-color: #f3f4f6;
+    border-left: 6px solid #2563eb;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+/* Contadores */
+.resumen {
+    color: #1e40af;
+    font-weight: bold;
+}
+
+/* Botones de filtros */
+.filtros button {
+    background-color: #0f766e;
+}
+
+.filtros button:hover {
+    background-color: #115e59;
+}
 .completada {
     text-decoration: line-through;
     opacity: 0.6;
