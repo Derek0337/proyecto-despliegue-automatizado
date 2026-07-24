@@ -72,7 +72,7 @@ function App() {
             <form onSubmit={agregarTarea}>
                 <input
                     type="text"
-                    placeholder="Escribe una tarea"
+                    placeholder="Escribe una actividad a realizar"
                     value={titulo}
                     onChange={(evento) => setTitulo(evento.target.value)}
                 />
