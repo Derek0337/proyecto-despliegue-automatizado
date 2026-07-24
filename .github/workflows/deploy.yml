@@ -1,0 +1,35 @@
+name: Despliegue automático
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Conectar al VPS y desplegar
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/deploy/proyecto-despliegue-automatizado
+
+            git pull origin main
+
+            cd backend
+            npm install
+            pm2 restart todo-backend
+
+            cd ../frontend
+            npm install
+            npm run build
+
+            sudo rm -rf /var/www/todo-app/*
+            sudo cp -r dist/. /var/www/todo-app/
+
+            sudo systemctl reload nginx

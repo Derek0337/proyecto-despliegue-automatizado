@@ -1,0 +1,33 @@
+### Obtener todas las tareas
+GET http://localhost:3000/api/tareas
+
+###
+
+### Obtener tarea por ID
+GET http://localhost:3000/api/tareas/1
+
+###
+
+### Crear una tarea
+POST http://localhost:3000/api/tareas
+Content-Type: application/json
+
+{
+    "titulo": "Estudiar Data Center"
+}
+
+###
+
+### Actualizar una tarea
+PUT http://localhost:3000/api/tareas/1
+Content-Type: application/json
+
+{
+    "titulo": "Proyecto terminado",
+    "completada": true
+}
+
+###
+
+### Eliminar una tarea
+DELETE http://localhost:3000/api/tareas/1
