@@ -159,18 +159,68 @@ function App() {
         (tarea) => tarea.completada
     ).length;
 
+    const porcentaje =
+        tareas.length === 0
+            ? 0
+            : Math.round((totalCompletadas / tareas.length) * 100);
+
     useEffect(() => {
         obtenerTareas();
     }, []);
 
     return (
-        <main className="contenedor">
+    <main className="contenedor">
+        <aside className="lateral">
+            <h2>Mis tareas</h2>
+
+            <div className="resumen-lateral">
+                <p>
+                    Total
+                    <strong>{tareas.length}</strong>
+                </p>
+
+                <p>
+                    Pendientes
+                    <strong>{totalPendientes}</strong>
+                </p>
+
+                <p>
+                    Completadas
+                    <strong>{totalCompletadas}</strong>
+                </p>
+            </div>
+
+            <h3>Filtros</h3>
+
+            <button
+                className={filtro === "todas" ? "activo" : ""}
+                onClick={() => setFiltro("todas")}
+            >
+                Todas
+            </button>
+
+            <button
+                className={filtro === "pendientes" ? "activo" : ""}
+                onClick={() => setFiltro("pendientes")}
+            >
+                Pendientes
+            </button>
+
+            <button
+                className={filtro === "completadas" ? "activo" : ""}
+                onClick={() => setFiltro("completadas")}
+            >
+                Completadas
+            </button>
+        </aside>
+
+        <section className="contenido">
             <h1>Lista de tareas</h1>
 
             <form onSubmit={agregarTarea}>
                 <input
                     type="text"
-                    placeholder="Escribe una actividad a realizar"
+                    placeholder="Escribe una actividad"
                     value={titulo}
                     onChange={(evento) => setTitulo(evento.target.value)}
                 />
@@ -178,36 +228,7 @@ function App() {
                 <button type="submit">Agregar</button>
             </form>
 
-            <div className="resumen">
-                <p>Total: {tareas.length}</p>
-                <p>Pendientes: {totalPendientes}</p>
-                <p>Completadas: {totalCompletadas}</p>
-            </div>
-
-            <div className="filtros">
-                <button
-                    className={filtro === "todas" ? "activo" : ""}
-                    onClick={() => setFiltro("todas")}
-                >
-                    Todas
-                </button>
-
-                <button
-                    className={filtro === "pendientes" ? "activo" : ""}
-                    onClick={() => setFiltro("pendientes")}
-                >
-                    Pendientes
-                </button>
-
-                <button
-                    className={filtro === "completadas" ? "activo" : ""}
-                    onClick={() => setFiltro("completadas")}
-                >
-                    Completadas
-                </button>
-            </div>
-
-            <section>
+            <section className="lista">
                 {tareasFiltradas.length === 0 ? (
                     <p>No hay tareas en este filtro.</p>
                 ) : (
@@ -218,17 +239,13 @@ function App() {
                                     type="text"
                                     value={tituloEditado}
                                     onChange={(evento) =>
-                                        setTituloEditado(
-                                            evento.target.value
-                                        )
+                                        setTituloEditado(evento.target.value)
                                     }
                                 />
                             ) : (
                                 <span
                                     className={
-                                        tarea.completada
-                                            ? "completada"
-                                            : ""
+                                        tarea.completada ? "completada" : ""
                                     }
                                 >
                                     {tarea.titulo}
@@ -258,7 +275,7 @@ function App() {
                                             }
                                         >
                                             {tarea.completada
-                                                ? "Marcar pendiente"
+                                                ? "Pendiente"
                                                 : "Completar"}
                                         </button>
 
@@ -271,6 +288,7 @@ function App() {
                                         </button>
 
                                         <button
+                                            className="eliminar"
                                             onClick={() =>
                                                 eliminarTarea(tarea.id)
                                             }
@@ -284,8 +302,9 @@ function App() {
                     ))
                 )}
             </section>
-        </main>
-    );
+        </section>
+    </main>
+);
 }
 
 export default App;
