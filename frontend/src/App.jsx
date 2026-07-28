@@ -215,7 +215,7 @@ function App() {
         </aside>
 
         <section className="contenido">
-            <h1>Lista de tareas</h1>
+            <h1>Actividades por realizar</h1>
 
             <form onSubmit={agregarTarea}>
                 <input
