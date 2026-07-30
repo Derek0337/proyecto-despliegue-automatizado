@@ -7,12 +7,28 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencias
 node_modules
+backend/node_modules
+frontend/node_modules
+
+# Builds
 dist
 dist-ssr
+frontend/dist
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Archivos locales
 *.local
 
-# Editor directories and files
+# Docker
+docker-compose.override.yml
+
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
