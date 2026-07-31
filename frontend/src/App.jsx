@@ -171,7 +171,7 @@ function App() {
     return (
     <main className="contenedor">
         <aside className="lateral">
-            <h2>Mis tareas</h2>
+            <h2>Mis tareas U</h2>
 
             <div className="resumen-lateral">
                 <p>
