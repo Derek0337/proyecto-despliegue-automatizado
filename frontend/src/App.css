@@ -84,13 +84,13 @@ input:focus {
 
 form button,
 .acciones button {
-    background-color: #2563eb;
+    background-color: #f30606;
     color: white;
 }
 
 form button:hover,
 .acciones button:hover {
-    background-color: #1d4ed8;
+    background-color: #ff0404;
 }
 
 .lista {
